@@ -5,6 +5,7 @@
 
 * Removed Plug-In from the jQAssistant Core Distribution to jqassistant-plugin
 ** Group and Artifact Id changed to `org.jqassistant.plugin:jqassistant-asciidoc-report-plugin`
+* Extracted PlantUML reports to a separate https://github.com/jqassistant-plugin/jqassistant-plantuml-report-plugin[PlantUML report plugin] to
 
 == 1.12.2
 

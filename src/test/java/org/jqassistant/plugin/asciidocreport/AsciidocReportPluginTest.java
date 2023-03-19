@@ -15,7 +15,6 @@ import com.buschmais.jqassistant.core.rule.api.model.Concept;
 import com.buschmais.jqassistant.core.rule.api.model.Constraint;
 import com.buschmais.jqassistant.core.rule.api.model.RuleException;
 import com.buschmais.jqassistant.core.rule.api.model.Severity;
-import org.jqassistant.plugin.asciidocreport.plantuml.RenderMode;
 import com.buschmais.jqassistant.plugin.common.api.model.ArtifactFileDescriptor;
 import com.buschmais.jqassistant.plugin.common.api.model.DependsOnDescriptor;
 import com.buschmais.xo.neo4j.api.model.Neo4jLabel;
@@ -24,6 +23,7 @@ import com.buschmais.xo.neo4j.api.model.Neo4jRelationship;
 import com.buschmais.xo.neo4j.api.model.Neo4jRelationshipType;
 
 import org.apache.commons.io.FileUtils;
+import org.jqassistant.plugin.plantumlreport.RenderMode;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -68,29 +68,6 @@ class AsciidocReportPluginTest extends AbstractAsciidocReportPluginTest {
         verify(properties, customReportDirectory);
     }
 
-    @Test
-    void smetanaPlantUmlRenderer() throws RuleException, IOException {
-        HashMap<String, Object> properties = new HashMap<>();
-        properties.put("asciidoc.report.rule.directory", ruleDirectory.getAbsolutePath());
-        properties.put("asciidoc.report.file.include", "index.adoc");
-        properties.put("plantuml.report.rendermode", "smetana");
-        verify(properties, new File(outputDirectory, "report/asciidoc"));
-        File plantUmlFile = new File(outputDirectory, "report/plantuml/test_ComponentDiagram.plantuml");
-        String plantuml = FileUtils.readFileToString(plantUmlFile, "UTF-8");
-        assertThat(plantuml).contains(RenderMode.SMETANA.getPragma());
-    }
-
-    @Test
-    void elkPlantUmlRenderer() throws RuleException, IOException {
-        HashMap<String, Object> properties = new HashMap<>();
-        properties.put("asciidoc.report.rule.directory", ruleDirectory.getAbsolutePath());
-        properties.put("asciidoc.report.file.include", "index.adoc");
-        properties.put("plantuml.report.rendermode", "elk");
-        verify(properties, new File(outputDirectory, "report/asciidoc"));
-        File plantUmlFile = new File(outputDirectory, "report/plantuml/test_ComponentDiagram.plantuml");
-        String plantuml = FileUtils.readFileToString(plantUmlFile, "UTF-8");
-        assertThat(plantuml).contains(RenderMode.ELK.getPragma());
-    }
 
     private String verify(Map<String, Object> properties, File expectedDirectory) throws RuleException, IOException {
         ReportContext reportContext = configureReportContext(properties);

@@ -19,8 +19,8 @@ import com.buschmais.jqassistant.core.rule.api.source.RuleSource;
 import com.buschmais.jqassistant.core.rule.impl.reader.AsciidocRuleParserPlugin;
 import com.buschmais.jqassistant.core.rule.impl.reader.RuleParser;
 import com.buschmais.jqassistant.core.shared.io.ClasspathResource;
-import org.jqassistant.plugin.asciidocreport.plantuml.component.ComponentDiagramReportPlugin;
 
+import org.jqassistant.plugin.plantumlreport.component.ComponentDiagramReportPlugin;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
