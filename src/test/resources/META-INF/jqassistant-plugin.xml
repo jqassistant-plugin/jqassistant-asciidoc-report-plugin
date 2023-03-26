@@ -1,0 +1,11 @@
+<jqassistant-plugin xmlns="http://schema.jqassistant.org/plugin/v1.10"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://schema.jqassistant.org/plugin/v1.10 https://schema.jqassistant.org/plugin/jqassistant-plugin-v1.10.xsd"
+                    name="jQAssistant Custom Plugin" id="jqa.plugin.it">
+    <description>Custom plugins.</description>
+    <rules>
+        <resource>custom/index.adoc</resource>
+        <resource>custom/include.adoc</resource>
+        <resource>include.adoc</resource>
+    </rules>
+</jqassistant-plugin>

@@ -3,7 +3,6 @@ package org.jqassistant.plugin.asciidocreport;
 import java.util.*;
 
 import com.buschmais.jqassistant.core.rule.api.model.ExecutableRule;
-import com.buschmais.jqassistant.core.shared.asciidoc.DocumentParser;
 
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.StructuralNode;

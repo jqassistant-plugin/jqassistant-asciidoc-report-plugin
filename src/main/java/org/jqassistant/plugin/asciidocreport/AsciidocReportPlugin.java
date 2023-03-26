@@ -13,8 +13,6 @@ import com.buschmais.jqassistant.core.report.api.ReportPlugin.Default;
 import com.buschmais.jqassistant.core.report.api.model.Result;
 import com.buschmais.jqassistant.core.rule.api.model.*;
 import com.buschmais.jqassistant.core.rule.api.source.RuleSource;
-import com.buschmais.jqassistant.core.shared.asciidoc.AsciidoctorFactory;
-import com.buschmais.jqassistant.core.shared.asciidoc.DocumentParser;
 
 import org.apache.commons.io.IOUtils;
 import org.asciidoctor.*;

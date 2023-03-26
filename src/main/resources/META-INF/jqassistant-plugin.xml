@@ -3,6 +3,9 @@
                     xsi:schemaLocation="http://schema.jqassistant.org/plugin/v1.10 https://schema.jqassistant.org/plugin/jqassistant-plugin-v1.10.xsd"
                     name="jQAssistant AsciiDoc Report Plugin" id="jqa.plugin.asciidocreport">
     <description>Renders AsciiDoc files containing rules to HTML reports including results as tables, diagrams or links to external files.</description>
+    <ruleParser>
+        <class>org.jqassistant.plugin.asciidocreport.AsciidocRuleParserPlugin</class>
+    </ruleParser>
     <report>
         <class id="asciidoc">org.jqassistant.plugin.asciidocreport.AsciidocReportPlugin</class>
     </report>

@@ -12,7 +12,6 @@ import java.util.Map;
 
 import com.buschmais.jqassistant.core.report.api.ReportContext;
 import com.buschmais.jqassistant.core.rule.api.model.ExecutableRule;
-import com.buschmais.jqassistant.core.shared.asciidoc.DocumentParser;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.asciidoctor.ast.ContentNode;

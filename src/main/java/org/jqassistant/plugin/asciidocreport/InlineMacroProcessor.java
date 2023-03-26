@@ -3,8 +3,6 @@ package org.jqassistant.plugin.asciidocreport;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.buschmais.jqassistant.core.shared.asciidoc.DocumentParser;
-
 import org.asciidoctor.ast.ContentNode;
 import org.asciidoctor.ast.StructuralNode;
 
