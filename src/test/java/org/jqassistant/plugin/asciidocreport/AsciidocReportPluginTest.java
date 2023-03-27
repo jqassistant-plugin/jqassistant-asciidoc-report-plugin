@@ -9,7 +9,9 @@ import java.util.Map;
 
 import com.buschmais.jqassistant.core.report.api.ReportContext;
 import com.buschmais.jqassistant.core.report.api.ReportPlugin;
+import com.buschmais.jqassistant.core.report.api.model.Column;
 import com.buschmais.jqassistant.core.report.api.model.Result;
+import com.buschmais.jqassistant.core.report.api.model.Row;
 import com.buschmais.jqassistant.core.report.impl.CompositeReportPlugin;
 import com.buschmais.jqassistant.core.rule.api.model.Concept;
 import com.buschmais.jqassistant.core.rule.api.model.Constraint;
@@ -23,13 +25,14 @@ import com.buschmais.xo.neo4j.api.model.Neo4jRelationship;
 import com.buschmais.xo.neo4j.api.model.Neo4jRelationshipType;
 
 import org.apache.commons.io.FileUtils;
-import org.jqassistant.plugin.plantumlreport.RenderMode;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.junit.jupiter.api.Test;
 
+import static com.buschmais.jqassistant.core.report.api.ReportHelper.toColumn;
+import static com.buschmais.jqassistant.core.report.api.ReportHelper.toRow;
 import static com.buschmais.jqassistant.core.report.api.model.Result.Status.*;
 import static java.lang.System.lineSeparator;
 import static java.util.Arrays.asList;
@@ -105,10 +108,10 @@ class AsciidocReportPluginTest extends AbstractAsciidocReportPluginTest {
         plugin.begin();
 
         Concept concept = ruleSet.getConceptBucket().getById("test:Concept");
-        List<Map<String, Object>> rows = new ArrayList<>();
-        Map<String, Object> row = new HashMap<>();
-        row.put("Value", asList("Foo", "Bar"));
-        rows.add(row);
+        List<Row> rows = new ArrayList<>();
+        Map<String, Column<?>> columns = new HashMap<>();
+        columns.put("Value", toColumn(asList("Foo", "Bar")));
+        rows.add(toRow(concept, columns));
         processConcept(plugin, concept, new Result<>(concept, SUCCESS, Severity.MAJOR, singletonList("Value"), rows));
 
         Constraint constraint = ruleSet.getConstraintBucket().getById("test:Constraint");
@@ -116,28 +119,28 @@ class AsciidocReportPluginTest extends AbstractAsciidocReportPluginTest {
             .severity(Severity.MAJOR).columnNames(singletonList("Value")).rows(rows).build());
 
         Concept componentDiagram = ruleSet.getConceptBucket().getById("test:ComponentDiagram");
-        List<Map<String, Object>> diagramRows = new ArrayList<>();
+        List<Row> diagramRows = new ArrayList<>();
         Neo4jLabel packageLabel = mock(Neo4jLabel.class);
         when(packageLabel.getName()).thenReturn("Package");
         ArtifactFileDescriptor node1 = createNode(1l, "a");
         ArtifactFileDescriptor node2 = createNode(2l, "b");
         DependsOnDescriptor dependsOn = createRelationship(1l, node1, node2);
-        Map<String, Object> diagramRow1 = new HashMap<>();
-        diagramRow1.put("Node", node1);
-        diagramRow1.put("DependsOn", dependsOn);
-        diagramRows.add(diagramRow1);
-        Map<String, Object> diagramRow2 = new HashMap<>();
-        diagramRow2.put("Node", node2);
-        diagramRow2.put("DependsOn", null);
-        diagramRows.add(diagramRow2);
+        Map<String, Column<?>> diagramRow1 = new HashMap<>();
+        diagramRow1.put("Node", toColumn(node1));
+        diagramRow1.put("DependsOn", toColumn(dependsOn));
+        diagramRows.add(toRow(componentDiagram, diagramRow1));
+        Map<String, Column<?>> diagramRow2 = new HashMap<>();
+        diagramRow2.put("Node", toColumn(node2));
+        diagramRow2.put("DependsOn", toColumn(null));
+        diagramRows.add(toRow(componentDiagram, diagramRow2));
         processConcept(plugin, componentDiagram, Result.<Concept> builder().rule(componentDiagram).status(SUCCESS).severity(Severity.INFO)
                 .columnNames(asList("Node", "DependsOn")).rows(diagramRows).build());
 
         Concept importedConcept = ruleSet.getConceptBucket().getById("test:ImportedConcept");
-        List<Map<String, Object>> importedConceptRows = new ArrayList<>();
-        Map<String, Object> importedConceptRow = new HashMap<>();
-        importedConceptRow.put("ImportedConceptValue", asList("FooBar"));
-        importedConceptRows.add(importedConceptRow);
+        List<Row> importedConceptRows = new ArrayList<>();
+        Map<String, Column<?>> importedConceptRow = new HashMap<>();
+        importedConceptRow.put("ImportedConceptValue", toColumn(asList("FooBar")));
+        importedConceptRows.add(toRow(importedConcept, importedConceptRow));
         processConcept(plugin, importedConcept, Result.<Concept> builder().rule(importedConcept).status(WARNING).severity(Severity.MINOR)
                 .columnNames(singletonList("ImportedConceptValue")).rows(importedConceptRows).build());
 

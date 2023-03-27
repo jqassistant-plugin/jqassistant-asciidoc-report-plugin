@@ -10,7 +10,9 @@ import com.buschmais.jqassistant.core.report.api.ReportException;
 import com.buschmais.jqassistant.core.report.api.ReportHelper;
 import com.buschmais.jqassistant.core.report.api.ReportPlugin;
 import com.buschmais.jqassistant.core.report.api.ReportPlugin.Default;
+import com.buschmais.jqassistant.core.report.api.model.Column;
 import com.buschmais.jqassistant.core.report.api.model.Result;
+import com.buschmais.jqassistant.core.report.api.model.Row;
 import com.buschmais.jqassistant.core.rule.api.model.*;
 import com.buschmais.jqassistant.core.rule.api.source.RuleSource;
 
@@ -175,10 +177,11 @@ public class AsciidocReportPlugin implements ReportPlugin {
     }
 
     private void addResultRows(Result<? extends ExecutableRule> result, RuleResult.RuleResultBuilder ruleResultBuilder) {
-        for (Map<String, Object> row : result.getRows()) {
+        for (Row row : result.getRows()) {
             Map<String, List<String>> resultRow = new LinkedHashMap<>();
-            for (Map.Entry<String, Object> rowEntry : row.entrySet()) {
-                Object value = rowEntry.getValue();
+            for (Map.Entry<String, Column<?>> rowEntry : row.getColumns().entrySet()) {
+                Column<?> column = rowEntry.getValue();
+                Object value = column.getValue();
                 List<String> values = new ArrayList<>();
                 if (value instanceof Iterable<?>) {
                     for (Object o : ((Iterable) value)) {

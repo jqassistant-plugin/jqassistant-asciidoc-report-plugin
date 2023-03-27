@@ -11,6 +11,7 @@ import com.buschmais.jqassistant.core.report.api.ReportException;
 import com.buschmais.jqassistant.core.report.api.ReportPlugin;
 import com.buschmais.jqassistant.core.report.api.model.Result;
 import com.buschmais.jqassistant.core.report.api.model.Result.Status;
+import com.buschmais.jqassistant.core.report.api.model.Row;
 import com.buschmais.jqassistant.core.report.impl.ReportContextImpl;
 import com.buschmais.jqassistant.core.rule.api.configuration.Rule;
 import com.buschmais.jqassistant.core.rule.api.model.*;
@@ -135,8 +136,8 @@ abstract class AbstractAsciidocReportPluginTest {
         return ruleParser.parse(ruleSources);
     }
 
-    protected final void processConcept(ReportPlugin plugin, String id, Status status, Severity severity, List<String> columnNames,
-            List<Map<String, Object>> rows) throws RuleException {
+    protected final void processConcept(ReportPlugin plugin, String id, Status status, Severity severity, List<String> columnNames, List<Row> rows)
+        throws RuleException {
         Concept includedConcept = ruleSet.getConceptBucket().getById(id);
         processConcept(plugin, includedConcept, new Result<>(includedConcept, status, severity, columnNames, rows));
     }
@@ -147,8 +148,8 @@ abstract class AbstractAsciidocReportPluginTest {
         plugin.endConcept();
     }
 
-    protected final void processConstraint(ReportPlugin plugin, String id, Status status, Severity severity, List<String> columnNames,
-            List<Map<String, Object>> rows) throws RuleException {
+    protected final void processConstraint(ReportPlugin plugin, String id, Status status, Severity severity, List<String> columnNames, List<Row> rows)
+        throws RuleException {
         Constraint constraint = ruleSet.getConstraintBucket().getById(id);
         processConstraint(plugin, constraint, new Result<>(constraint, status, severity, columnNames, rows));
     }
