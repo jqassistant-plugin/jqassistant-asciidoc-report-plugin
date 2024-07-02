@@ -177,7 +177,7 @@ public class AsciidocRuleParserPlugin extends AbstractRuleParserPlugin {
                 Map<String, String> providesConcepts = getReferences(attributes, PROVIDES_CONCEPTS);
                 Severity severity = getSeverity(attributes, this::getDefaultConceptSeverity);
                 Concept concept = Concept.builder().id(id).description(description).severity(severity).executable(executable)
-                        .providesConcepts(providesConcepts.keySet()).requiresConcepts(required).parameters(parameters).verification(verification).report(report)
+                        .providedConcepts(providesConcepts.keySet()).requiresConcepts(required).parameters(parameters).verification(verification).report(report)
                         .ruleSource(ruleSource).build();
                 builder.addConcept(concept);
             } else if (CONSTRAINT.equals(executableRuleBlock.getRole())) {
