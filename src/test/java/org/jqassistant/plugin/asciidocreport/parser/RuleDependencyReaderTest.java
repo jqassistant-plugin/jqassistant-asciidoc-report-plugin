@@ -42,8 +42,8 @@ class RuleDependencyReaderTest extends AbstractRuleParserTest {
             .get("test:Concept3"), equalTo(null));
         Concept providingConcept = ruleSet.getConceptBucket()
             .getById("test:ProvidingConcept");
-        assertThat(providingConcept.getProvidesConcepts(), hasItem("test:Concept1"));
-        assertThat(providingConcept.getProvidesConcepts(), hasItem("test:Concept2"));
+        assertThat(providingConcept.getProvidedConcepts(), hasItem("test:Concept1"));
+        assertThat(providingConcept.getProvidedConcepts(), hasItem("test:Concept2"));
         // Constraints
         Constraint constraintWithOptionalDependency = ruleSet.getConstraintBucket()
             .getById("test:ConstraintWithOptionalDependency");

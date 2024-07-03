@@ -29,7 +29,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static com.buschmais.jqassistant.core.report.api.ReportHelper.toColumn;
 import static com.buschmais.jqassistant.core.report.api.ReportHelper.toRow;
@@ -38,8 +40,7 @@ import static java.lang.System.lineSeparator;
 import static java.util.Arrays.asList;
 import static java.util.Collections.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class AsciidocReportPluginTest extends AbstractAsciidocReportPluginTest {
 
@@ -121,7 +122,7 @@ class AsciidocReportPluginTest extends AbstractAsciidocReportPluginTest {
         Concept componentDiagram = ruleSet.getConceptBucket().getById("test:ComponentDiagram");
         List<Row> diagramRows = new ArrayList<>();
         Neo4jLabel packageLabel = mock(Neo4jLabel.class);
-        when(packageLabel.getName()).thenReturn("Package");
+        lenient().when(packageLabel.getName()).thenReturn("Package");
         ArtifactFileDescriptor node1 = createNode(1l, "a");
         ArtifactFileDescriptor node2 = createNode(2l, "b");
         DependsOnDescriptor dependsOn = createRelationship(1l, node1, node2);
@@ -244,9 +245,9 @@ class AsciidocReportPluginTest extends AbstractAsciidocReportPluginTest {
         when(relationship.getStartNode()).thenReturn(startNode);
         when(relationship.getEndNode()).thenReturn(endNode);
         DependsOnDescriptor dependsOnDescriptor = mock(DependsOnDescriptor.class);
-        when(dependsOnDescriptor.getDependent()).thenReturn(start);
-        when(dependsOnDescriptor.getDependency()).thenReturn(end);
-        when(dependsOnDescriptor.getDelegate()).thenReturn(relationship);
+        lenient().when(dependsOnDescriptor.getDependent()).thenReturn(start);
+        lenient().when(dependsOnDescriptor.getDependency()).thenReturn(end);
+        lenient().when(dependsOnDescriptor.getDelegate()).thenReturn(relationship);
         return dependsOnDescriptor;
     }
 }
