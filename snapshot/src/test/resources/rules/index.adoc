@@ -1,0 +1,17 @@
+:toc:
+= Rules
+
+== Summary
+
+include::jQA:Summary[]
+
+[[test:concept]]
+[source,cypher,role=concept]
+.Test Concept
+----
+MERGE
+  (n:Test{name:"Test"})
+RETURN
+  n
+----
+
