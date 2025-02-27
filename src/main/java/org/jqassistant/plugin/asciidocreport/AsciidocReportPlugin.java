@@ -88,9 +88,18 @@ public class AsciidocReportPlugin implements ReportPlugin {
             Asciidoctor asciidoctor = AsciidoctorFactory.getAsciidoctor();
             LOGGER.info("Writing to report directory " + reportDirectory.getAbsolutePath());
             for (RuleSource ruleSource : filteredRuleSources) {
-                OptionsBuilder optionsBuilder = Options.builder().mkDirs(true).toDir(reportDirectory).backend(BACKEND_HTML5).safe(SafeMode.UNSAFE)
-                        .attributes(Attributes.builder().experimental(true).sourceHighlighter(CODERAY).icons("font").build());
-                ruleSource.getDirectory().ifPresent(baseDir -> optionsBuilder.baseDir(baseDir));
+                OptionsBuilder optionsBuilder = Options.builder()
+                    .mkDirs(true)
+                    .toDir(reportDirectory)
+                    .backend(BACKEND_HTML5)
+                    .safe(SafeMode.UNSAFE)
+                    .attributes(Attributes.builder()
+                        .experimental(true)
+                        .sourceHighlighter(CODERAY)
+                        .icons("font")
+                        .build());
+                ruleSource.getDirectory()
+                    .ifPresent(optionsBuilder::baseDir);
                 String outputFileName = getOutputFileName(ruleSource);
                 optionsBuilder.toFile(new File(outputFileName));
                 Options options = optionsBuilder.build();
@@ -102,8 +111,9 @@ public class AsciidocReportPlugin implements ReportPlugin {
                 extensionRegistry.includeProcessor(includeProcessor);
                 extensionRegistry.includeProcessor(new PluginIncludeProcessor(reportContext.getClassLoader(), ruleSource.getRelativePath()));
                 extensionRegistry.inlineMacro(new InlineMacroProcessor(documentParser));
-                extensionRegistry.treeprocessor(new TreePreprocessor(documentParser, conceptResults, constraintResults,
-                        new File(reportDirectory, outputFileName).getParentFile(), reportContext));
+                extensionRegistry.treeprocessor(
+                    new TreePreprocessor(documentParser, conceptResults, constraintResults, new File(reportDirectory, outputFileName).getParentFile(),
+                        reportContext));
                 extensionRegistry.postprocessor(new RulePostProcessor(conceptResults, constraintResults));
                 asciidoctor.convert(content, options);
                 asciidoctor.unregisterAllExtensions();
@@ -128,7 +138,7 @@ public class AsciidocReportPlugin implements ReportPlugin {
      * {@link RuleSource} extension with ".html".
      *
      * @param ruleSource
-     *            The {@link RuleSource}.
+     *     The {@link RuleSource}.
      * @return The output file name.
      */
     private String getOutputFileName(RuleSource ruleSource) {
@@ -169,30 +179,34 @@ public class AsciidocReportPlugin implements ReportPlugin {
     private RuleResult getRuleResult(Result<? extends ExecutableRule> result) {
         RuleResult.RuleResultBuilder ruleResultBuilder = RuleResult.builder();
         List<String> columnNames = result.getColumnNames();
-        ruleResultBuilder.rule(result.getRule()).effectiveSeverity(result.getSeverity()).status(result.getStatus()).columnNames(columnNames);
+        ruleResultBuilder.rule(result.getRule())
+            .effectiveSeverity(result.getSeverity())
+            .status(result.getStatus())
+            .columnNames(columnNames);
         if (!SKIPPED.equals(result.getStatus())) {
-            addResultRows(result, ruleResultBuilder);
+            for (Row row : result.getRows()) {
+                ruleResultBuilder.row(toResultRow(row));
+            }
         }
         return ruleResultBuilder.build();
     }
 
-    private void addResultRows(Result<? extends ExecutableRule> result, RuleResult.RuleResultBuilder ruleResultBuilder) {
-        for (Row row : result.getRows()) {
-            Map<String, List<String>> resultRow = new LinkedHashMap<>();
-            for (Map.Entry<String, Column<?>> rowEntry : row.getColumns().entrySet()) {
-                Column<?> column = rowEntry.getValue();
-                Object value = column.getValue();
-                List<String> values = new ArrayList<>();
-                if (value instanceof Iterable<?>) {
-                    for (Object o : ((Iterable) value)) {
-                        values.add(ReportHelper.getLabel(o));
-                    }
-                } else {
-                    values.add(ReportHelper.getLabel(value));
+    private static Map<String, List<String>> toResultRow(Row row) {
+        Map<String, List<String>> resultRow = new LinkedHashMap<>();
+        for (Map.Entry<String, Column<?>> rowEntry : row.getColumns()
+            .entrySet()) {
+            Column<?> column = rowEntry.getValue();
+            Object value = column.getValue();
+            List<String> values = new ArrayList<>();
+            if (value instanceof Iterable<?>) {
+                for (Object o : ((Iterable) value)) {
+                    values.add(ReportHelper.getLabel(o));
                 }
-                resultRow.put(rowEntry.getKey(), values);
+            } else {
+                values.add(ReportHelper.getLabel(value));
             }
-            ruleResultBuilder.row(resultRow);
+            resultRow.put(rowEntry.getKey(), values);
         }
+        return resultRow;
     }
 }
