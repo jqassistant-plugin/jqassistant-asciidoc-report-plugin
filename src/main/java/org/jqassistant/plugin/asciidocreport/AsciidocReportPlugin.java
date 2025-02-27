@@ -60,7 +60,7 @@ public class AsciidocReportPlugin implements ReportPlugin {
         File defaultReportDirectory = reportContext.getReportDirectory(DEFAULT_REPORT_DIRECTORY);
         this.reportDirectory = getFile(PROPERTY_DIRECTORY, defaultReportDirectory, properties).getAbsoluteFile();
         if (this.reportDirectory.mkdirs()) {
-            LOGGER.info("Created directory '" + this.reportDirectory.getAbsolutePath() + "'.");
+            LOGGER.info("Created directory '{}'.", this.reportDirectory.getAbsolutePath());
         }
         File ruleDirectory = getFile(PROPERTY_RULE_DIRECTORY, null, properties);
         String fileInclude = (String) properties.get(PROPERTY_FILE_INCLUDE);
@@ -86,7 +86,7 @@ public class AsciidocReportPlugin implements ReportPlugin {
         if (!filteredRuleSources.isEmpty()) {
             LOGGER.info("Calling for the Asciidoctor...");
             Asciidoctor asciidoctor = AsciidoctorFactory.getAsciidoctor();
-            LOGGER.info("Writing to report directory " + reportDirectory.getAbsolutePath());
+            LOGGER.info("Writing to report directory {}", reportDirectory.getAbsolutePath());
             for (RuleSource ruleSource : filteredRuleSources) {
                 OptionsBuilder optionsBuilder = Options.builder()
                     .mkDirs(true)
