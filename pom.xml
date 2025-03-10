@@ -13,7 +13,7 @@
 
     <name>jQAssistant AsciiDoc Report Plugin</name>
     <description>The jQAssistant plugin for creating reports from AsciiDoc files.</description>
-    <url>https://jqassistant.org/</url>
+    <url>https://github.com/jqassistant-plugin/jqassistant-asciidoc-report-plugin</url>
 
     <organization>
         <name>jQAssistant Development Team</name>
