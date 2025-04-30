@@ -49,7 +49,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <org.jsoup.version>1.19.1</org.jsoup.version>
+        <org.jsoup.version>1.20.1</org.jsoup.version>
         <org.asciidoctor.version>2.5.7</org.asciidoctor.version>
         <org.asciidoctorj-diagram.version>2.3.2</org.asciidoctorj-diagram.version>
         <org.jruby.version>9.4.12.0</org.jruby.version>
