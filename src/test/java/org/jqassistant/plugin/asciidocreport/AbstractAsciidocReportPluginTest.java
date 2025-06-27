@@ -9,6 +9,7 @@ import java.util.Map;
 import com.buschmais.jqassistant.core.report.api.ReportContext;
 import com.buschmais.jqassistant.core.report.api.ReportException;
 import com.buschmais.jqassistant.core.report.api.ReportPlugin;
+import com.buschmais.jqassistant.core.report.api.configuration.Build;
 import com.buschmais.jqassistant.core.report.api.model.Result;
 import com.buschmais.jqassistant.core.report.api.model.Result.Status;
 import com.buschmais.jqassistant.core.report.api.model.Row;
@@ -38,6 +39,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @MockitoSettings(strictness = Strictness.LENIENT)
 @ExtendWith(MockitoExtension.class)
 abstract class AbstractAsciidocReportPluginTest {
+
+    @Mock
+    private Build build;
 
     @Mock
     private Rule rule;
@@ -72,7 +76,7 @@ abstract class AbstractAsciidocReportPluginTest {
     protected abstract List<String> getAsciidocFiles();
 
     protected final ReportContext configureReportContext(Map<String, Object> properties) throws ReportException {
-        ReportContext reportContext = new ReportContextImpl(AbstractAsciidocReportPluginTest.class.getClassLoader(), null, outputDirectory);
+        ReportContext reportContext = new ReportContextImpl(build, AbstractAsciidocReportPluginTest.class.getClassLoader(), null, outputDirectory);
         for (ReportPlugin reportPlugin : reportPlugins.values()) {
             reportPlugin.configure(reportContext, properties);
         }

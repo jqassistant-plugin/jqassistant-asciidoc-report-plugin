@@ -32,9 +32,11 @@ import org.asciidoctor.extension.PreprocessorReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.buschmais.jqassistant.core.rule.api.model.Concept.Activation.IF_AVAILABLE;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * @author mh
@@ -174,10 +176,17 @@ public class AsciidocRuleParserPlugin extends AbstractRuleParserPlugin {
             Verification verification = getVerification(attributes);
             Report report = getReport(executableRuleBlock);
             if (CONCEPT.equals(executableRuleBlock.getRole())) {
-                Map<String, String> providesConcepts = getReferences(attributes, PROVIDES_CONCEPTS);
+                Set<Concept.ProvidedConcept> providedConcepts = getReferences(attributes, PROVIDES_CONCEPTS).keySet()
+                    .stream()
+                    .map(providedConceptId -> Concept.ProvidedConcept.builder()
+                        .providingConceptId(id)
+                        .providedConceptId(providedConceptId)
+                        .activation(IF_AVAILABLE)
+                        .build())
+                    .collect(toSet());
                 Severity severity = getSeverity(attributes, this::getDefaultConceptSeverity);
                 Concept concept = Concept.builder().id(id).description(description).severity(severity).executable(executable)
-                        .providedConcepts(providesConcepts.keySet()).requiresConcepts(required).parameters(parameters).verification(verification).report(report)
+                        .providedConcepts(providedConcepts).requiresConcepts(required).parameters(parameters).verification(verification).report(report)
                         .ruleSource(ruleSource).build();
                 builder.addConcept(concept);
             } else if (CONSTRAINT.equals(executableRuleBlock.getRole())) {
