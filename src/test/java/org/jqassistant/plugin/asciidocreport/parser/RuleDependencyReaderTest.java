@@ -1,5 +1,7 @@
 package org.jqassistant.plugin.asciidocreport.parser;
 
+import java.util.Set;
+
 import com.buschmais.jqassistant.core.rule.api.model.Concept;
 import com.buschmais.jqassistant.core.rule.api.model.Constraint;
 import com.buschmais.jqassistant.core.rule.api.model.RuleException;
@@ -7,6 +9,7 @@ import com.buschmais.jqassistant.core.rule.api.model.RuleSet;
 
 import org.junit.jupiter.api.Test;
 
+import static java.util.stream.Collectors.toSet;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -42,8 +45,12 @@ class RuleDependencyReaderTest extends AbstractRuleParserTest {
             .get("test:Concept3"), equalTo(null));
         Concept providingConcept = ruleSet.getConceptBucket()
             .getById("test:ProvidingConcept");
-        assertThat(providingConcept.getProvidedConcepts(), hasItem("test:Concept1"));
-        assertThat(providingConcept.getProvidedConcepts(), hasItem("test:Concept2"));
+        Set<String> providedConcepts = providingConcept.getProvidedConcepts()
+            .stream()
+            .map(providedConcept -> providedConcept.getProvidedConceptId())
+            .collect(toSet());
+        assertThat(providedConcepts, hasItem("test:Concept1"));
+        assertThat(providedConcepts, hasItem("test:Concept2"));
         // Constraints
         Constraint constraintWithOptionalDependency = ruleSet.getConstraintBucket()
             .getById("test:ConstraintWithOptionalDependency");
